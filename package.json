@@ -1,0 +1,8 @@
+{
+  "name": "RakutenCodingTest",
+  "version": "0.0.1",
+  "description": "Chat Server",
+  "dependencies": {
+    "redis": "^2.6.2"
+  }
+}
