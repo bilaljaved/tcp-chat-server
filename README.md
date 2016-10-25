@@ -16,7 +16,10 @@ To see if Node is installed, type node -v in Terminal. This should print the ver
 To see if NPM is installed, type npm -v in Terminal. This should print the version number so you’ll see something like this 1.4.27
 node-install1
 - Now take pull from this repository. 
-- Go to the main directory of the code using terminal (cd tcpchat) and run "npm install"
+- Go to the main directory of the code using terminal (cd tcp-chat-server) and run "npm install"
 - Now run "node server.js" and that's it. The server is up and running on port 5000.
+- You can connect to this server using telnet
+
+
 
 
