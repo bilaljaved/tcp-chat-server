@@ -77,7 +77,10 @@ function listAllRooms(sock)
 function broadcastMessage(sock,msg,system)
 {
     if(sock.room == null)
+    {
+        sock.write("You should join a room to chat with other users. type /rooms to see available rooms or /create_room to create your own\n");
         return;
+    }
 
     var targetUsers = sock.room.users;
     var sender = sock.name +":";
