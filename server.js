@@ -43,7 +43,7 @@ function removeRoom(roomName)
 {
     var room = rooms.getItem(roomName);
     var targetUsers = room.users;
-
+    //Iterate through all users in room, kick them out, set appropriate data
     for(var i =0; i<targetUsers.length ; i++)
     {
         var userName = targetUsers[i];
@@ -54,6 +54,7 @@ function removeRoom(roomName)
 
     }
 
+    //remove room from our collection
     rooms.removeItem(roomName);
 
 }
@@ -106,26 +107,32 @@ function acceptConnection(sock)
     sock.on('data', function(data)
     {
         // client writes message
-        console.log("DATA = " + data);
 
+        //console.log("DATA = " + data);
+
+        //remove line feed from the data
         data = (data+"");
         data = data.replace(/(\r\n|\n|\r)/gm,"");
 
-        console.log("SOCKET NAME = "+sock.name);
+        //console.log("SOCKET NAME = "+sock.name);
+
+        //If user have no name then let him choose a name first before he/she proceeds
         if(sock.name == undefined || sock.name == "undefined" || sock.name == null || sock.name == '')
         {
             var isValid = isValidString(data);
             var userExists = users.hasItem(data);
 
+            //Username should be alphanumeric and a valid string which is not already picked by another user
             if(isAlphanumeric(data) && isValid && !userExists)
             {
-                console.log(data);
+                //console.log(data);
 
                 sock.name = data;
                 users.setItem(data,sock);
             }
             else
             {
+                //Try again
                 var msg = "The name you entered is not valid, Try again\n";
                 if(userExists)
                     msg = "Sorry, the name is already taken, Try again\n";
@@ -134,21 +141,24 @@ function acceptConnection(sock)
                 return;
             }
 
+            //name choose successfully. say welcome
             sock.write("Welcome "+ data + "\n");
             return;
 
         }
 
+        //QUIT
         if (data.startsWith('/quit'))
         {
 
-            console.log('exit command received: ' + sock.remoteAddress + ':' + sock.remotePort + '\n');
+            //console.log('exit command received: ' + sock.remoteAddress + ':' + sock.remotePort + '\n');
 
             sock.write("BYE "+sock.name+". Hope to see you soon\n");
             sock.destroy();
             users.removeItem(sock.name);
 
         }
+        //CREATE NEW ROOM
         else if(data.startsWith('/create_room'))
         {
             if(sock.room != null)
@@ -178,6 +188,7 @@ function acceptConnection(sock)
             createRoom(sock,splitted[1]);
 
         }
+        //JOIN A ROOM
         else if(data.startsWith('/join'))
         {
             if(sock.room != null)
@@ -212,10 +223,12 @@ function acceptConnection(sock)
             roomToJoin.listAllUsers(sock);
             broadcastMessage(sock,"New User Joined Chat: "+ sock.name +"\n",true);
         }
+        //LIST ALL ROOMS
         else if(data.startsWith('/rooms'))
         {
             listAllRooms(sock);
         }
+        //LEAVE
         else if(data.startsWith('/leave'))
         {
             if(sock.room == null)
@@ -236,10 +249,12 @@ function acceptConnection(sock)
             sock.room = null;
 
         }
+        //DELETE ROOM
         else if(data.startsWith('/delete_room'))
         {
             splitted = data.split(" ");
 
+            //Not enough number of parameters in command
             if(splitted.length < 2)
             {
                 sock.write("Please specify a name for room e.g. /delete_room MyHeaven\n");
@@ -247,6 +262,7 @@ function acceptConnection(sock)
             }
             roomName = splitted[1];
 
+            //Default room can not be deleted by any user
             if(roomName == "Default") {
                 sock.write("You can not delete Default room");
                 return;
@@ -254,30 +270,34 @@ function acceptConnection(sock)
 
             var roomToDelete = rooms.getItem(roomName);
 
+            //Room doesn't exists. Less likely to happen but who knows.
             if(roomToDelete == undefined)
             {
                 sock.write("There's no such group named "+roomName+"\n");
                 return;
             }
 
+            //Not an owner? Ethically not allowed to delete the room
             if(roomToDelete.owner != sock.name)
             {
                 sock.write("Only owner of a chat room can delete the room.\n");
                 return;
             }
 
+
+            //All set, remove the room
             removeRoom(roomName);
 
         }
         else
         {
-            rooms.each(function(a,b){
-                console.log("Room --------> Name = "+ a + "UserCount ="+ b.getUserCount() + "\n");
-            });
-
-            users.each(function(a,b){
-                console.log("User -------->  Key = "+ a + "Value ="+ b.name + "\n");
-            });
+            //rooms.each(function(a,b){
+            //    console.log("Room --------> Name = "+ a + "UserCount ="+ b.getUserCount() + "\n");
+            //});
+            //
+            //users.each(function(a,b){
+            //    console.log("User -------->  Key = "+ a + "Value ="+ b.name + "\n");
+            //});
 
             broadcastMessage(sock, data);
         }
@@ -285,7 +305,7 @@ function acceptConnection(sock)
     });
 
     sock.on('end', function() { // client disconnects
-        console.log('Disconnected\n');
+        //console.log('Disconnected\n');
         sock.destroy();
         users.removeItem(sock.name);
     });
@@ -296,5 +316,5 @@ var svr = net.createServer(acceptConnection);
 createRoom(null,"Default");
 svr.listen(5000, '0.0.0.0');
 
-console.log('Chat Server Created');
+//console.log('Chat Server Created');
 
