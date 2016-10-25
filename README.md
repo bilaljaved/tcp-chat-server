@@ -6,9 +6,9 @@ chat with other people in room etc.
 
 #Installation Instructions
 
-- Make sure you've brew pakcage manager installed in your system. In case you don't have brew installed, you can install it by running following command
+- Make sure you've brew package manager installed in your system. In case you don't have brew installed, you can install it by running following command on terminal
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
--  Open the Terminal app and type brew install node.
+-  Now run "brew install node"
 - Sit back and wait. Homebrew downloads some files and installs them. And that’s it.
  -To make sure you have Node and NPM installed, run two simple commands to see what version of each is installed:
 
