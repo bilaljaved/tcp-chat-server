@@ -292,6 +292,42 @@ function acceptConnection(sock)
             removeRoom(roomName);
 
         }
+        //Private message
+        else if(data.startsWith('/poke') || data.startsWith('/ping') || data.startsWith('/private'))
+        {
+            splitted = data.split(" ");
+
+            if(splitted.length < 2)
+            {
+                sock.write("*Please specify a user name you want to poke e.g. /poke Jun\n");
+                return;
+            }
+
+            var userName = splitted[1];
+
+            //User should exist
+            if(!users.hasItem(userName))
+            {
+                sock.write("*User with the name "+userName+" does not exists \n");
+                return;
+            }
+
+            var msg = "*User "+ sock.name +" has poked you*\n";
+            //if there's any message with poke
+            if(splitted.length > 2)
+            {
+                msg = "*User "+sock.name+" has sent you a private msg : ";
+                msg += splitted.slice(2,splitted.length).join(" ") + "\n";
+            }
+            var targetUser = users.getItem(userName);
+
+            //notify recipient
+            if(targetUser)
+                targetUser.write(msg);
+            //notify sender
+            sock.write("*You've poked "+userName+"\n");
+
+        }
         else
         {
             //rooms.each(function(a,b){
