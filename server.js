@@ -214,7 +214,7 @@ function acceptConnection(sock)
 
             if(!isValid || !rooms.hasItem(roomName))
             {
-                sock.write("*Seems like the room name you entered is not valid, Try Again... \n");
+                sock.write("*Seems like the room name you entered is not valid or it already exists, Try Again... \n");
                 return;
             }
 
