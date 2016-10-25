@@ -77,15 +77,15 @@ function broadcastMessage(sock,msg,system)
         return;
 
     var targetUsers = sock.room.users;
-    var sender = sock.name;
+    var sender = sock.name +":";
     if(system != undefined)
-        sender = ":";
+        sender = "*";
 
     for(var i =0; i<targetUsers.length ; i++)
     {
         var userName = targetUsers[i];
         if(userName != sock.name)
-            users.getItem(userName).write(sender +":"+msg+"\n");
+            users.getItem(userName).write(sender + msg+"\n");
     }
 
 }
@@ -208,6 +208,7 @@ function acceptConnection(sock)
 
             sock.write("Entering Room "+roomName+"\n");
             roomToJoin.listAllUsers(sock);
+            broadcastMessage(sock,"New User Joined Chat: "+ sock.name +"\n",true);
         }
         else if(data.startsWith('/rooms'))
         {

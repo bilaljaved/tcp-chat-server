@@ -30,7 +30,7 @@ Room.prototype.listAllUsers = function(socket)
     }
     str+= "\n";
 
-    socket.write(str);
+    socket.write("*"+str);
   }
 
 };
