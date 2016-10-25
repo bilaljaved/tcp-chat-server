@@ -291,7 +291,7 @@ function acceptConnection(sock)
 
 var svr = net.createServer(acceptConnection);
 createRoom(null,"Default");
-svr.listen(5000, '127.0.0.1');
+svr.listen(5000, '0.0.0.0');
 
 console.log('Chat Server Created');
 
