@@ -50,7 +50,7 @@ function removeRoom(roomName)
         var user = users.getItem(userName);
         room.removeUser(userName);
         user.room = null;
-        user.write("Chat room you're currently in has been deleted, you're automatically ejected from it. You can create your own using /create_room [RoomName]\n");
+        user.write("**Chat room you're currently in has been deleted, you're automatically ejected from it. You can create your own using /create_room [RoomName] **\n");
 
     }
 
@@ -61,7 +61,7 @@ function removeRoom(roomName)
 
 function listAllRooms(sock)
 {
-   if(rooms.length == 0 ) sock.write("There are no rooms at the time. You can create your own using /create_room [RoomName]\n");
+   if(rooms.length == 0 ) sock.write("*There are no rooms at the time. You can create your own using /create_room [RoomName]*\n");
 
    rooms.each(function(key, room){
 
@@ -78,7 +78,7 @@ function broadcastMessage(sock,msg,system)
 {
     if(sock.room == null)
     {
-        sock.write("You should join a room to chat with other users. type /rooms to see available rooms or /create_room to create your own\n");
+        sock.write("*You should join a room to chat with other users. type /rooms to see available rooms or /create_room to create your own\n");
         return;
     }
 
@@ -99,9 +99,9 @@ function broadcastMessage(sock,msg,system)
 function acceptConnection(sock)
 {
 
-    sock.write('Welcome to the world of SAURAN\n');
+    sock.write('*Welcome to the world of SAURAN\n');
 
-    sock.write('Login Name?\n');
+    sock.write('*Login Name?\n');
     sock.name = '';
     sock.room = null;
 
@@ -136,16 +136,16 @@ function acceptConnection(sock)
             else
             {
                 //Try again
-                var msg = "The name you entered is not valid, Try again\n";
+                var msg = "*The name you entered is not valid, Try again\n";
                 if(userExists)
-                    msg = "Sorry, the name is already taken, Try again\n";
+                    msg = "*Sorry, the name is already taken, Try again\n";
 
                 sock.write(msg);
                 return;
             }
 
             //name choose successfully. say welcome
-            sock.write("Welcome "+ data + "\n");
+            sock.write("*Welcome "+ data + "\n");
             return;
 
         }
@@ -166,7 +166,7 @@ function acceptConnection(sock)
         {
             if(sock.room != null)
             {
-                sock.write("You are already in a room\n");
+                sock.write("*You are already in a room\n");
                 return;
             }
 
@@ -174,7 +174,7 @@ function acceptConnection(sock)
 
             if(splitted.length < 2)
             {
-                sock.write("Please specify a name for room e.g. create_room MyHeaven\n");
+                sock.write("*Please specify a name for room e.g. create_room MyHeaven\n");
                 return;
 
             }
@@ -183,7 +183,7 @@ function acceptConnection(sock)
 
             if(!isValid || rooms.hasItem(splitted[1]))
             {
-                sock.write("Seems like the room name you entered is not valid, Try Again... \n");
+                sock.write("*Seems like the room name you entered is not valid, Try Again... \n");
                 return;
             }
 
@@ -196,7 +196,7 @@ function acceptConnection(sock)
         {
             if(sock.room != null)
             {
-                sock.write("You are already in a room, Please leave this room if you want to join another\n");
+                sock.write("*You are already in a room, Please leave this room if you want to join another\n");
                 return;
             }
 
@@ -204,7 +204,7 @@ function acceptConnection(sock)
 
             if(splitted.length < 2)
             {
-                sock.write("Please specify a name for room e.g. /join MyHeaven\n");
+                sock.write("*Please specify a name for room e.g. /join MyHeaven\n");
                 return;
             }
 
@@ -214,7 +214,7 @@ function acceptConnection(sock)
 
             if(!isValid || !rooms.hasItem(roomName))
             {
-                sock.write("Seems like the room name you entered is not valid, Try Again... \n");
+                sock.write("*Seems like the room name you entered is not valid, Try Again... \n");
                 return;
             }
 
@@ -236,17 +236,17 @@ function acceptConnection(sock)
         {
             if(sock.room == null)
             {
-                sock.write("You are not in any room right now\n");
+                sock.write("*You are not in any room right now\n");
                 return;
             }
 
             if(!rooms.hasItem(sock.room.name))
             {
-                sock.write("Something goes wrong. Please exit and try reconnecting to server \n");
+                sock.write("*Something goes wrong. Please exit and try reconnecting to server \n");
                 return;
             }
 
-            sock.write("You've left the room "+ sock.room.name + "\n");
+            sock.write("*You've left the room "+ sock.room.name + "\n");
             broadcastMessage(sock,"User has left the chat : "+sock.name + "\n",true);
             sock.room.removeUser(sock.name);
             sock.room = null;
@@ -260,14 +260,14 @@ function acceptConnection(sock)
             //Not enough number of parameters in command
             if(splitted.length < 2)
             {
-                sock.write("Please specify a name for room e.g. /delete_room MyHeaven\n");
+                sock.write("*Please specify a name for room e.g. /delete_room MyHeaven\n");
                 return;
             }
             roomName = splitted[1];
 
             //Default room can not be deleted by any user
             if(roomName == "Default") {
-                sock.write("You can not delete Default room");
+                sock.write("*You can not delete Default room\n");
                 return;
             }
 
@@ -276,14 +276,14 @@ function acceptConnection(sock)
             //Room doesn't exists. Less likely to happen but who knows.
             if(roomToDelete == undefined)
             {
-                sock.write("There's no such group named "+roomName+"\n");
+                sock.write("*There's no such room named "+roomName+"\n");
                 return;
             }
 
             //Not an owner? Ethically not allowed to delete the room
             if(roomToDelete.owner != sock.name)
             {
-                sock.write("Only owner of a chat room can delete the room.\n");
+                sock.write("*Only owner of a chat room can delete the room.\n");
                 return;
             }
 
