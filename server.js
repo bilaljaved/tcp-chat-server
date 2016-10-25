@@ -32,9 +32,11 @@ function createRoom(sock,roomName)
         room.addUser(sock.name);
         sock.room = room;
         room.owner = sock.name;
+        sock.write("Room named "+roomName+" created successfully");
     }
 
     rooms.setItem(roomName,room);
+
 }
 
 function removeRoom(roomName)
