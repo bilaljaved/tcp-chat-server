@@ -4,7 +4,7 @@ A Simple TCP Based Chat Room Server written in NodeJS
 This chat server is written in NodeJS using base Node modules. Users can connect, choose a unique nick name, create rooms, join rooms,
 chat with other people in room etc.
 
-#Installation Instructions
+#Installation Instructions (MacOS)
 
 - Make sure you've brew package manager installed in your system. In case you don't have brew installed, you can install it by running following command on terminal
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
